@@ -5,13 +5,77 @@ package lab7;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.HashMap;
 
 
 public class Huffman {
-    public static void main(String[] args) throws FileNotFoundException{
-        File file = new File(args[0]);
-        Scanner reader = new Scanner(file);
+
+    public static void main(String[] args){
+      for (String input : args){
+          File file = new File(input);
+          encoding(file);
+          Node<Character> node = new Node<Character>('c');
+
+      }
+    
+
 
         
     }
+
+  public static HashMap<Character, Node<Character>> encoding(File file){
+    HashMap<Character, Node<Character>> map = new HashMap<Character, Node<Character>>();
+    try{
+
+        Scanner reader = new Scanner(file);
+        String current;
+        while (reader.hasNextLine()){
+          current = reader.nextLine();
+            for (char c : current.toCharArray()){
+              if (map.containsKey(c)) map.get(c).count++;
+                
+              else {
+                Node<Character> temp = new Node<Character>(c);
+                map.put(c, temp);
+              }
+            }
+        }
+    }
+    catch (FileNotFoundException e){
+      e.printStackTrace();
+
+    }
+    return map;
+
+  }
+
+  private class Tree{
+    public Tree(String input){
+
+    }
+  }
+  private static class Node<T>{
+    public int count;
+    public Node<T> left; 
+    public Node<T> right;
+    public T value;
+
+    public Node(T value){
+      this.value = value;
+      count = 0;
+    }
+    public Node(T value, int count){
+      this.value = value;
+      this.count = count;
+    }
+
+    public Node(T value, Node<T> left, Node<T> right){
+      this.value = value;
+      this.left = left;
+      this.right = right;
+      count = 0;
+
+    }
+
+  }
 }
