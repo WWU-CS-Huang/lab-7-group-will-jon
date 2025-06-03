@@ -12,9 +12,12 @@ import java.util.HashMap;
 public class Huffman {
 
     public static void main(String[] args){
+      
       for (String input : args){
           File file = new File(input);
-          encoding(file);
+          System.out.println(file.getAbsolutePath());
+          Heap<Node<Character>, Integer> heap = encoding(file);
+          buildTree(heap);
           Node<Character> node = new Node<Character>('c');
 
       }
@@ -24,8 +27,8 @@ public class Huffman {
         
     }
 
-  public static Heap<Character, Integer> encoding(File file){
-    Heap< Character, Integer> map = new Heap< Character, Integer>();
+  public static Heap<Node<Character>, Integer> encoding(File file){
+    Heap< Node<Character>, Integer> map = new Heap< Node<Character>, Integer>();
     try{
 
         Scanner reader = new Scanner(file);
@@ -33,9 +36,12 @@ public class Huffman {
         while (reader.hasNextLine()){
           current = reader.nextLine();
             for (char c : current.toCharArray()){
-              map.add(c, 0);
+              System.out.println(c + " " + new Node<Character>(c).hashCode());
+              if (map.contains(new Node<Character>(c))) System.out.println("Contains: " + c);
+              map.add(new Node<Character>(c), 0);
             }
         }
+        reader.close();
     }
     catch (FileNotFoundException e){
       e.printStackTrace();
@@ -44,8 +50,12 @@ public class Huffman {
     return map;
 
   }
-  public static Node<Character> buildTree(Heap<Character, Integer> heap){
-    while(heap.size() > 1)
+  public static Node<Character> buildTree(Heap<Node<Character>, Integer> heap){
+    while(heap.size() > 1){
+      Node<Character> temp = heap.poll();
+      System.out.println(temp.value + " " + temp.hashCode());
+    }
+    return null;
     
   }
 
@@ -75,6 +85,10 @@ public class Huffman {
       this.right = right;
       count = 0;
 
+    }
+    @Override
+    public int hashCode(){
+      return value.hashCode();
     }
 
   }

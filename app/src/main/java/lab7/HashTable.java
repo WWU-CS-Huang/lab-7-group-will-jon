@@ -66,6 +66,7 @@ public class HashTable<K,V> {
       Pair pair = getPair(key);
       return pair == null ? null : pair.value;
     }
+
     public Pair getPair(K key){
 
       int hash = Math.abs(key.hashCode()) % buckets.length;
