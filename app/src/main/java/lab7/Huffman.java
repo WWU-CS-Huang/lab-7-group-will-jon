@@ -24,8 +24,8 @@ public class Huffman {
         
     }
 
-  public static HashMap<Character, Node<Character>> encoding(File file){
-    HashMap<Character, Node<Character>> map = new HashMap<Character, Node<Character>>();
+  public static Heap<Character, Integer> encoding(File file){
+    Heap< Character, Integer> map = new Heap< Character, Integer>();
     try{
 
         Scanner reader = new Scanner(file);
@@ -33,12 +33,7 @@ public class Huffman {
         while (reader.hasNextLine()){
           current = reader.nextLine();
             for (char c : current.toCharArray()){
-              if (map.containsKey(c)) map.get(c).count++;
-                
-              else {
-                Node<Character> temp = new Node<Character>(c);
-                map.put(c, temp);
-              }
+              map.add(c, 0);
             }
         }
     }
@@ -49,35 +44,9 @@ public class Huffman {
     return map;
 
   }
-  public static Node<Character> buildTree(HashMap<Character, Node<Character>> map){
+  public static Node<Character> buildTree(Heap<Character, Integer> heap){
+    while(heap.size() > 1)
     
-    // while (map.size() > 1) { 
-        
-    //     Node first = null;
-    //     Node second = null;
-    //     for (Node<Character> node : map.values()) {
-    //         if (first == null) {
-    //             first = node;
-    //         }else if(second == null){
-    //             second = node;
-    //         }else if(node.count < first.count){
-    //             if(first.count < second.count){
-    //                 second = first;
-    //             }
-    //             first = node;
-    //         }else if(node.count < second.count){
-    //             if(first.count > second.count){
-    //                 first = second;
-    //             }
-    //             second = node;
-    //         }
-    //     }
-    //     Node parent = new Node<Character>(null, first, second);
-    //     map.remove(first.value);
-    //     map.remove(second.value);
-    //     map.put((char)11, parent);
-    // }
-    // return;
   }
 
 //   private class Tree{
