@@ -73,7 +73,8 @@ public class HashTable<K,V> {
       Pair cur = buckets[hash];
 
       while (cur!= null){
-      if (cur.key.equals(key)) return cur;
+            // System.out.println("cur: " + cur.value + " cur.key:"+ cur.key + " key:" + key + " equals:"  + Boolean.toString(cur.key == key));
+      if (cur.key.hashCode() == key.hashCode()) return cur;
       cur = cur.next; 
     }
     return null;

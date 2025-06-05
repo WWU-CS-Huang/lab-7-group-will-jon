@@ -15,7 +15,7 @@ public class Huffman {
       
       for (String input : args){
           File file = new File(input);
-          System.out.println(file.getAbsolutePath());
+          // System.out.println(file.getAbsolutePath());
           Heap<Node<Character>, Integer> heap = encoding(file);
           buildTree(heap);
           Node<Character> node = new Node<Character>('c');
@@ -36,8 +36,12 @@ public class Huffman {
         while (reader.hasNextLine()){
           current = reader.nextLine();
             for (char c : current.toCharArray()){
-              System.out.println(c + " " + new Node<Character>(c).hashCode());
-              if (map.contains(new Node<Character>(c))) System.out.println("Contains: " + c);
+                Node<Character> temp = new Node<Character>(c);
+              // System.out.println(c + " " + new Node<Character>(c).hashCode());
+              if (map.contains(temp)) {
+                map.changePriority(temp, map.getPriority(temp) + 1);
+
+            } else
               map.add(new Node<Character>(c), 0);
             }
         }
@@ -53,7 +57,7 @@ public class Huffman {
   public static Node<Character> buildTree(Heap<Node<Character>, Integer> heap){
     while(heap.size() > 1){
       Node<Character> left = heap.poll();
-      System.out.println(left.value + " " + left.hashCode());
+      // System.out.println(left.value + " " + left.hashCode());
       Node<Character> right = heap.poll();
       //
       Node<Character> combine = new Node<Character>('\n', left, right, left.count + right.count);

@@ -197,6 +197,10 @@ public final class Heap<V, P extends Comparable<P>> {
         //         have to.
         // throw new UnsupportedOperationException();
     }
+    public P getPriority(V value){
+        return c.get(map.get(value)).priority;
+
+    }
 
     /** Return true if the value v is in the heap, false otherwise.
      *  The average case runtime is O(1).  */
