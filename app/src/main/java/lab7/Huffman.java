@@ -52,10 +52,14 @@ public class Huffman {
   }
   public static Node<Character> buildTree(Heap<Node<Character>, Integer> heap){
     while(heap.size() > 1){
-      Node<Character> temp = heap.poll();
-      System.out.println(temp.value + " " + temp.hashCode());
+      Node<Character> left = heap.poll();
+      System.out.println(left.value + " " + left.hashCode());
+      Node<Character> right = heap.poll();
+      //
+      Node<Character> combine = new Node<Character>(null, left, right, left.count + right.count);
+      heap.add(combine, combine.count);
     }
-    return null;
+    return heap.poll();
     
   }
 
@@ -84,6 +88,14 @@ public class Huffman {
       this.left = left;
       this.right = right;
       count = 0;
+
+    }
+
+    public Node(T value, Node<T> left, Node<T> right, int count){
+      this.value = value;
+      this.left = left;
+      this.right = right;
+      this.count = count;
 
     }
     @Override
