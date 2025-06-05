@@ -10,15 +10,17 @@ import java.util.HashMap;
 
 
 public class Huffman {
-
+    private static Node head;
     public static void main(String[] args){
       
       for (String input : args){
           File file = new File(input);
           // System.out.println(file.getAbsolutePath());
-          Heap<Node<Character>, Integer> heap = encoding(file);
-          buildTree(heap);
+          Heap<Node<Character>, Integer> heap = getCount(file);
+          head = buildTree(heap);
           Node<Character> node = new Node<Character>('c');
+          System.out.println(input);
+          System.out.print(decode(encode(input)));
 
       }
     
@@ -26,8 +28,15 @@ public class Huffman {
 
         
     }
+    public static String encode(String input){
+        String output = "";
+        for(int i = 0; i < input.length(); i++){
+            input.charAt(i);
+        }
+        return output;
+    }
 
-  public static Heap<Node<Character>, Integer> encoding(File file){
+  public static Heap<Node<Character>, Integer> getCount(File file){
     Heap< Node<Character>, Integer> map = new Heap< Node<Character>, Integer>();
     try{
 
@@ -65,6 +74,27 @@ public class Huffman {
     }
     return heap.poll();
     
+  }
+
+  public static String decode(String input){
+    String output = "";
+    int index = 0;
+    while(index < input.length()){
+        Node cur = head;
+        while(cur.value.equals('\n')){
+            if(input.charAt(index) == '0') {
+                cur = cur.left;
+
+            }else{
+                cur = cur.right;
+
+            }
+            index++;
+        }
+        output = output.concat(cur.value.toString());
+        index++;
+    }
+    return output;
   }
 
 //   private class Tree{
