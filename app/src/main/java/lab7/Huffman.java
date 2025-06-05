@@ -56,7 +56,7 @@ public class Huffman {
       System.out.println(left.value + " " + left.hashCode());
       Node<Character> right = heap.poll();
       //
-      Node<Character> combine = new Node<Character>(null, left, right, left.count + right.count);
+      Node<Character> combine = new Node<Character>('\n', left, right, left.count + right.count);
       heap.add(combine, combine.count);
     }
     return heap.poll();
