@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 public class Huffman {
     private static Node head;
+    
     public static void main(String[] args){
       
       for (String input : args){
@@ -21,7 +22,6 @@ public class Huffman {
           Node<Character> node = new Node<Character>('c');
           System.out.println(input);
           System.out.print(decode(encode(input)));
-
       }
     
 
@@ -70,6 +70,8 @@ public class Huffman {
       Node<Character> right = heap.poll();
       //
       Node<Character> combine = new Node<Character>('\n', left, right, left.count + right.count);
+      left.parent = combine;
+      right.parent = combine;
       heap.add(combine, combine.count);
     }
     return heap.poll();
@@ -106,6 +108,7 @@ public class Huffman {
     public int count;
     public Node<T> left; 
     public Node<T> right;
+    public Node<T> parent;
     public T value;
 
     public Node(T value){
@@ -137,5 +140,8 @@ public class Huffman {
       return value.hashCode();
     }
 
+  }
+  private static class Graph{
+    
   }
 }
