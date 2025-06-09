@@ -40,6 +40,8 @@ public class Huffman {
                     System.out.println("Coded: " + coded);
                      System.out.println("output: " + out);
                 }
+            System.out.println((double)coded.length() / in.length() / 8.0);
+                System.out.println("Decoded equals input: " + out.equals(in));
 
             } catch(Exception e){
                 e.printStackTrace();
@@ -60,7 +62,9 @@ public class Huffman {
     for (int i = 0; i < level; i++) {
       System.out.print("        ");
     }
-    System.out.println(n.value =='\n' ? 'T' : n.value);
+    if (n.value == '\n') System.out.println(n.count);
+    else System.out.println(n.value);
+    // System.out.println(n.value =='\n' ? n.count : n.value);
     printSubtree(n.left, level + 1);
   }
 
@@ -109,13 +113,12 @@ public class Huffman {
         while (reader.hasNextLine()){
           current = reader.nextLine();
             for (char c : current.toCharArray()){
-                Node<Character> temp = new Node<Character>(c);
+                Node<Character> temp = new Node<Character>(c, 1);
               // System.out.println(c + " " + new Node<Character>(c).hashCode());
               if (hashmap.containsKey(c)) {
                         temp = hashmap.get(c);
                         temp.count++;
                         map.changePriority(temp, temp.count);
-                // map.changePriority(temp, map.getPriority(temp) + 1);
 
             } else
                     {
@@ -138,11 +141,9 @@ public class Huffman {
     if (heap.size() < 1) return null;
     while(heap.size() > 1){
       Node<Character> left = heap.poll();
-      // System.out.println(left.value + " " + left.hashCode());
       Node<Character> right = heap.poll();
       if(left.value != '\n') {
                 nodes.put(left.value, left);
-                // System.out.println("Added " + left.value);
             }
 
       if(right.value != '\n') {
