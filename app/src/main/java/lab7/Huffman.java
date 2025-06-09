@@ -7,10 +7,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.HashMap;
+import heap.Heap;
+import avl.AVL;
+
 
 
 public class Huffman {
-    private static Node head;
+    private static Node<Character> head;
+    static HashMap<Character, Node<Character>> nodes = new HashMap<Character, Node<Character>>();
     
     public static void main(String[] args){
       
@@ -19,25 +23,85 @@ public class Huffman {
           // System.out.println(file.getAbsolutePath());
           Heap<Node<Character>, Integer> heap = getCount(file);
           head = buildTree(heap);
+            // printSubtree(head, 0);
           Node<Character> node = new Node<Character>('c');
-          System.out.println(input);
-          System.out.print(decode(encode(input)));
+            try {
+            Scanner scan = new Scanner(file);
+            String in = "";
+            while(scan.hasNextLine()){
+                in =in.concat(scan.nextLine());
+
+            }
+            if (in.length() < 100) System.out.println("input: " + in);
+            String coded = encode(in);
+            String out = decode(coded);
+            
+            if (in.length() < 100){
+                    System.out.println("Coded: " + coded);
+                     System.out.println("output: " + out);
+                }
+
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+
+            
       }
     
 
 
         
     }
+  private static void printSubtree(Node<Character> n, int level) {
+    if (n == null) {
+      return;
+    }
+    printSubtree(n.right, level + 1);
+    for (int i = 0; i < level; i++) {
+      System.out.print("        ");
+    }
+    System.out.println(n.value =='\n' ? 'T' : n.value);
+    printSubtree(n.left, level + 1);
+  }
+
     public static String encode(String input){
         String output = "";
+        Node<Character> temp;
+        Node<Character> parent;
+        char letter;
+        StringBuilder current = new StringBuilder();
         for(int i = 0; i < input.length(); i++){
-            input.charAt(i);
+            letter = input.charAt(i);
+            current.setLength(0);
+            // System.out.println(letter);
+            if (!nodes.containsKey(letter)) throw new IllegalArgumentException();
+            
+
+            temp = nodes.get(letter);
+            while (temp.parent != null){
+                parent = temp.parent;
+                if (parent.left == temp){
+                    current = current.append("0");
+                } else{
+                    current = current.append("1");
+                }
+                temp = parent;
+
+            }
+                current.reverse();
+                // System.out.println("Letter: " + letter + " coded: "+ current);
+
+                output = output.concat(current.toString());
+
+
         }
         return output;
     }
 
   public static Heap<Node<Character>, Integer> getCount(File file){
     Heap< Node<Character>, Integer> map = new Heap< Node<Character>, Integer>();
+        HashMap<Character, Node<Character>> hashmap = new HashMap<Character, Node<Character>>();
+
     try{
 
         Scanner reader = new Scanner(file);
@@ -47,11 +111,18 @@ public class Huffman {
             for (char c : current.toCharArray()){
                 Node<Character> temp = new Node<Character>(c);
               // System.out.println(c + " " + new Node<Character>(c).hashCode());
-              if (map.contains(temp)) {
-                map.changePriority(temp, map.getPriority(temp) + 1);
+              if (hashmap.containsKey(c)) {
+                        temp = hashmap.get(c);
+                        temp.count++;
+                        map.changePriority(temp, temp.count);
+                // map.changePriority(temp, map.getPriority(temp) + 1);
 
             } else
-              map.add(new Node<Character>(c), 0);
+                    {
+                        hashmap.put(c, temp);
+
+              map.add(temp, 1);
+                    }
             }
         }
         reader.close();
@@ -64,46 +135,46 @@ public class Huffman {
 
   }
   public static Node<Character> buildTree(Heap<Node<Character>, Integer> heap){
+    if (heap.size() < 1) return null;
     while(heap.size() > 1){
       Node<Character> left = heap.poll();
       // System.out.println(left.value + " " + left.hashCode());
       Node<Character> right = heap.poll();
-      //
+      if(left.value != '\n') {
+                nodes.put(left.value, left);
+                // System.out.println("Added " + left.value);
+            }
+
+      if(right.value != '\n') {
+
+                nodes.put(right.value, right);
+            }
       Node<Character> combine = new Node<Character>('\n', left, right, left.count + right.count);
       left.parent = combine;
       right.parent = combine;
       heap.add(combine, combine.count);
     }
+
     return heap.poll();
     
   }
 
   public static String decode(String input){
     String output = "";
-    int index = 0;
-    while(index < input.length()){
-        Node cur = head;
-        while(cur.value.equals('\n')){
-            if(input.charAt(index) == '0') {
-                cur = cur.left;
+    Node<Character> cur = head;
+    for (char c : input.toCharArray()){
+            if (c =='0') cur = cur.left;
+            else cur = cur.right;
+            if (cur.value != '\n'){
 
-            }else{
-                cur = cur.right;
-
+                output = output.concat(cur.value.toString());
+                cur = head;
             }
-            index++;
-        }
-        output = output.concat(cur.value.toString());
-        index++;
+
     }
     return output;
   }
 
-//   private class Tree{
-//     public Tree(String input){
-
-//     }
-//   }
   private static class Node<T>{
     public int count;
     public Node<T> left; 
@@ -140,8 +211,5 @@ public class Huffman {
       return value.hashCode();
     }
 
-  }
-  private static class Graph{
-    
   }
 }
